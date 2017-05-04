@@ -1,0 +1,20 @@
+<%= form_tag root_path, method: :get do |f| %>
+  <%= label_tag(:country, "Select country:") %>
+
+  <%= select_tag(:country, options_for_select(
+    ISO3166::Country.codes.map { |code| [ISO3166::Country.new(code).name, code] },
+    @country
+  )) %>
+
+  <br />
+  <%= label_tag(:city, "Enter the city:") %>
+  <%= text_field_tag(:city, @city) %>
+  <%= submit_tag("Search") %>
+<% end %>
+
+<hr>
+
+<code><%= @weather_info %></code>
+<%- if @weather_info && @weather_info['coord'] %>
+<%= link_to("map", "https://www.google.de/maps/search/#{@weather_info['coord']['lat']},+#{@weather_info['coord']['lon']}", target: '_blank') %>
+<%- end %>
