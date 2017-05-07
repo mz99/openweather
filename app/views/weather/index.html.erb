@@ -1,6 +1,6 @@
+<%= link_to("I feel lucky", root_path(randomize: true)) %>
 <%= form_tag root_path, method: :get do |f| %>
   <%= label_tag(:country, "Select country:") %>
-
   <%= select_tag(:country, options_for_select(
     ISO3166::Country.codes.map { |code| [ISO3166::Country.new(code).name, code] },
     @country
@@ -14,7 +14,13 @@
 
 <hr>
 
-<code><%= @weather_info %></code>
-<%- if @weather_info && @weather_info['coord'] %>
-<%= link_to("map", "https://www.google.de/maps/search/#{@weather_info['coord']['lat']},+#{@weather_info['coord']['lon']}", target: '_blank') %>
+<%- if @weather_info %>
+  <%- @weather_info.each do |key, value| %>
+    <%- unless value.to_s.empty? %>
+      <p><%= "#{key}: #{value}" %></p>
+    <%- end %>
+  <%- end %>
+  <%- if @weather_info['lat'] && @weather_info['lon'] %>
+    <%= link_to("map", "https://www.google.de/maps/search/#{@weather_info['lat']},+#{@weather_info['lon']}", target: '_blank') %>
+  <%- end %>
 <%- end %>
